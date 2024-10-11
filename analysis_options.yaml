@@ -1,0 +1,19 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    always_declare_return_types: true
+    avoid_multiple_declarations_per_line: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    require_trailing_commas: true
+    prefer_const_declarations: true
+    always_put_required_named_parameters_first: true
+    avoid_unused_constructor_parameters: true
+    eol_at_end_of_file: true
+    flutter_style_todos: true
+    prefer_single_quotes: true
+    use_decorated_box: true
+    use_enums: true
+    sort_constructors_first: true
+    always_use_package_imports: true
