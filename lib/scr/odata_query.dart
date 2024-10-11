@@ -28,13 +28,57 @@ class ODataQuery {
     this.count,
   });
 
+  /// The `$search` parameter allows searching for specific values across multiple fields.
+  /// It supports free-text search, and the search string must be URL-encoded.
+
   final String? search;
+
+  /// The `$filter` parameter is used to apply specific conditions or filters to the query.
+  /// It helps to narrow down the results by specifying logical operations like `eq`, `ne`, `lt`, `gt`, etc.
+  ///
+  /// Example:
+  /// ```dart
+  /// filter: Filter.eq('Name', 'Milk')
+  /// ```
   final Filter? filter;
+
+  /// The `$orderby` parameter is used to specify sorting of the results based on one or more fields.
+  /// You can sort the results in ascending or descending order.
+  ///
+  /// Example:
+  /// ```dart
+  /// orderBy: OrderBy.desc('Price')
+  /// ```
   final OrderBy? orderBy;
+
+  /// The `$select` parameter allows selecting specific fields to be returned in the result set.
+  /// This reduces the payload size by fetching only the required properties.
+  ///
+  /// Example:
+  /// ```dart
+  /// select: ['Name', 'Price']
+  /// ```
   final List<String>? select;
+
+  /// The `$expand` parameter is used to include related entities in the query response.
+  /// It allows for expanding related entities, typically in a parent-child relationship.
+  ///
+  /// Example:
+  /// ```dart
+  /// expand: ['Category', 'Item']
+  /// ```
   final List<String>? expand;
+
+  /// The `$top` parameter limits the number of records returned by the query.
+  /// It is useful for pagination or retrieving a fixed number of results.
   final int? top;
+
+  /// The `$skip` parameter is used to skip a specified number of records from the result set.
+  /// It is useful for implementing pagination alongside `$top`.
   final int? skip;
+
+  /// The `$count` parameter determines whether the total count of records should be included in the response.
+  /// When set to `true`, the count of the matching entities will be returned along with the result.
   final bool? count;
 
   /// Builds the final OData query string by combining all provided options.
@@ -55,10 +99,8 @@ class ODataQuery {
       if (search case final search?) r'$search': search,
       if (filter case final filter?) r'$filter': filter.toString(),
       if (orderBy case final orderBy?) r'$orderby': orderBy.toString(),
-      if (select case final select? when select.isNotEmpty)
-        r'$select': select.join(','),
-      if (expand case final expand? when expand.isNotEmpty)
-        r'$expand': expand.join(','),
+      if (select case final select? when select.isNotEmpty) r'$select': select.join(','),
+      if (expand case final expand? when expand.isNotEmpty) r'$expand': expand.join(','),
       if (top case final top?) r'$top': top.toString(),
       if (skip case final skip?) r'$skip': skip.toString(),
       if (count case final count?) r'$count': count.toString().toLowerCase(),
@@ -68,9 +110,7 @@ class ODataQuery {
       return '';
     }
 
-    final queryString = params.entries
-        .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
-        .join('&');
+    final queryString = params.entries.map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}').join('&');
     return queryString;
   }
 }
@@ -90,41 +130,33 @@ class ODataQuery {
 /// Output: "Name eq 'Milk' and Price lt 2.55"
 /// ```
 class Filter {
-  Filter._(this.expression);
+  Filter._(this._expression);
 
-  final String expression;
+  final String _expression;
 
   /// Creates an equality filter (e.g., "Name eq 'Milk'").
-  static Filter eq(String field, dynamic value) =>
-      Filter._('$field eq ${_encode(value)}');
+  static Filter eq(String field, dynamic value) => Filter._('$field eq ${_encode(value)}');
 
   /// Creates a non-equality filter (e.g., "Name ne 'Milk'").
-  static Filter ne(String field, dynamic value) =>
-      Filter._('$field ne ${_encode(value)}');
+  static Filter ne(String field, dynamic value) => Filter._('$field ne ${_encode(value)}');
 
   /// Creates a greater-than filter (e.g., "Price gt 2.55").
-  static Filter gt(String field, dynamic value) =>
-      Filter._('$field gt ${_encode(value)}');
+  static Filter gt(String field, dynamic value) => Filter._('$field gt ${_encode(value)}');
 
   /// Creates a less-than filter (e.g., "Price lt 2.55").
-  static Filter lt(String field, dynamic value) =>
-      Filter._('$field lt ${_encode(value)}');
+  static Filter lt(String field, dynamic value) => Filter._('$field lt ${_encode(value)}');
 
   /// Creates a greater-than or equal-to filter.
-  static Filter ge(String field, dynamic value) =>
-      Filter._('$field ge ${_encode(value)}');
+  static Filter ge(String field, dynamic value) => Filter._('$field ge ${_encode(value)}');
 
   /// Creates a less-than or equal-to filter.
-  static Filter le(String field, dynamic value) =>
-      Filter._('$field le ${_encode(value)}');
+  static Filter le(String field, dynamic value) => Filter._('$field le ${_encode(value)}');
 
   /// Combines two filters using a logical AND (e.g., "Name eq 'Milk' and Price lt 2.55").
-  static Filter and(Filter left, Filter right) =>
-      Filter._('${left.expression} and ${right.expression}');
+  static Filter and(Filter left, Filter right) => Filter._('${left._expression} and ${right._expression}');
 
   /// Combines two filters using a logical OR (e.g., "Name eq 'Milk' or Price lt 2.55").
-  static Filter or(Filter left, Filter right) =>
-      Filter._('${left.expression} or ${right.expression}');
+  static Filter or(Filter left, Filter right) => Filter._('${left._expression} or ${right._expression}');
 
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
@@ -136,7 +168,7 @@ class Filter {
 
   /// Converts the filter to a string for query usage.
   @override
-  String toString() => expression;
+  String toString() => _expression;
 }
 
 /// The OrderBy class is used to create OData $orderby expressions, allowing sorting
@@ -149,9 +181,9 @@ class Filter {
 /// Output: "Price desc"
 /// ```
 class OrderBy {
-  OrderBy._(this.expression);
+  OrderBy._(this._expression);
 
-  final String expression;
+  final String _expression;
 
   /// Sorts results by a field in ascending order (e.g., "Price asc").
   static OrderBy asc(String field) => OrderBy._('$field asc');
@@ -161,5 +193,5 @@ class OrderBy {
 
   /// Converts the order-by clause to a string for query usage.
   @override
-  String toString() => expression;
+  String toString() => _expression;
 }
