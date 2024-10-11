@@ -99,8 +99,10 @@ class ODataQuery {
       if (search case final search?) r'$search': search,
       if (filter case final filter?) r'$filter': filter.toString(),
       if (orderBy case final orderBy?) r'$orderby': orderBy.toString(),
-      if (select case final select? when select.isNotEmpty) r'$select': select.join(','),
-      if (expand case final expand? when expand.isNotEmpty) r'$expand': expand.join(','),
+      if (select case final select? when select.isNotEmpty)
+        r'$select': select.join(','),
+      if (expand case final expand? when expand.isNotEmpty)
+        r'$expand': expand.join(','),
       if (top case final top?) r'$top': top.toString(),
       if (skip case final skip?) r'$skip': skip.toString(),
       if (count case final count?) r'$count': count.toString().toLowerCase(),
@@ -110,7 +112,9 @@ class ODataQuery {
       return '';
     }
 
-    final queryString = params.entries.map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}').join('&');
+    final queryString = params.entries
+        .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
+        .join('&');
     return queryString;
   }
 }
@@ -135,28 +139,36 @@ class Filter {
   final String _expression;
 
   /// Creates an equality filter (e.g., "Name eq 'Milk'").
-  static Filter eq(String field, dynamic value) => Filter._('$field eq ${_encode(value)}');
+  static Filter eq(String field, dynamic value) =>
+      Filter._('$field eq ${_encode(value)}');
 
   /// Creates a non-equality filter (e.g., "Name ne 'Milk'").
-  static Filter ne(String field, dynamic value) => Filter._('$field ne ${_encode(value)}');
+  static Filter ne(String field, dynamic value) =>
+      Filter._('$field ne ${_encode(value)}');
 
   /// Creates a greater-than filter (e.g., "Price gt 2.55").
-  static Filter gt(String field, dynamic value) => Filter._('$field gt ${_encode(value)}');
+  static Filter gt(String field, dynamic value) =>
+      Filter._('$field gt ${_encode(value)}');
 
   /// Creates a less-than filter (e.g., "Price lt 2.55").
-  static Filter lt(String field, dynamic value) => Filter._('$field lt ${_encode(value)}');
+  static Filter lt(String field, dynamic value) =>
+      Filter._('$field lt ${_encode(value)}');
 
   /// Creates a greater-than or equal-to filter.
-  static Filter ge(String field, dynamic value) => Filter._('$field ge ${_encode(value)}');
+  static Filter ge(String field, dynamic value) =>
+      Filter._('$field ge ${_encode(value)}');
 
   /// Creates a less-than or equal-to filter.
-  static Filter le(String field, dynamic value) => Filter._('$field le ${_encode(value)}');
+  static Filter le(String field, dynamic value) =>
+      Filter._('$field le ${_encode(value)}');
 
   /// Combines two filters using a logical AND (e.g., "Name eq 'Milk' and Price lt 2.55").
-  static Filter and(Filter left, Filter right) => Filter._('${left._expression} and ${right._expression}');
+  static Filter and(Filter left, Filter right) =>
+      Filter._('${left._expression} and ${right._expression}');
 
   /// Combines two filters using a logical OR (e.g., "Name eq 'Milk' or Price lt 2.55").
-  static Filter or(Filter left, Filter right) => Filter._('${left._expression} or ${right._expression}');
+  static Filter or(Filter left, Filter right) =>
+      Filter._('${left._expression} or ${right._expression}');
 
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
