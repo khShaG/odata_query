@@ -12,7 +12,8 @@ void main() {
         orderBy: OrderBy.desc('Price'),
       ).build();
 
-      expect(query, r'$filter=Name%20eq%20%27Milk%27%20and%20Price%20lt%202.55&$orderby=Price%20desc');
+      expect(query,
+          r'$filter=Name%20eq%20%27Milk%27%20and%20Price%20lt%202.55&$orderby=Price%20desc');
     });
 
     test('Builds a query with top, count, and skip', () {
