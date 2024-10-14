@@ -35,19 +35,23 @@ void main() {
   // "$filter=Name%20eq%20'Milk'%20and%20Price%20lt%202.55&$orderby=Price%20desc&$select=Name,Price&$expand=Category&$top=10&$count=true"
 
   final queryMap = ODataQuery(
-    search: 'Bakery',
-    top: 5,
-    skip: 10,
-    orderBy: OrderBy.asc('Name'),
+    filter: Filter.and(
+      Filter.or(
+        Filter.eq('Category', 'Beverages'),
+        Filter.eq('Category', 'Snacks'),
+      ),
+      Filter.gt('Price', 5),
+    ),
+    select: ['Name', 'Price', 'Category'],
+    expand: ['Supplier', 'Category'],
   ).toMap();
 
-  print(queryMap); 
+  print(queryMap);
   // Output:
   // {
-  //   '$search': 'Bakery',
-  //   '$orderby': 'Name asc',
-  //   '$top': '5',
-  //   '$skip': '10'
+  //   '$filter': "Category eq 'Beverages' or Category eq 'Snacks' and Price gt 5",
+  //   '$select': 'Name,Price,Category',
+  //   '$expand': 'Supplier,Category',
   // }
 }
 ```
