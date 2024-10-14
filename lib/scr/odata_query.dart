@@ -81,6 +81,17 @@ class ODataQuery {
   /// When set to `true`, the count of the matching entities will be returned along with the result.
   final bool? count;
 
+  Map<String, String> get _params => {
+        if (search case final search?) r'$search': search,
+        if (filter case final filter?) r'$filter': filter.toString(),
+        if (orderBy case final orderBy?) r'$orderby': orderBy.toString(),
+        if (select case final select? when select.isNotEmpty) r'$select': select.join(','),
+        if (expand case final expand? when expand.isNotEmpty) r'$expand': expand.join(','),
+        if (top case final top?) r'$top': top.toString(),
+        if (skip case final skip?) r'$skip': skip.toString(),
+        if (count case final count?) r'$count': count.toString().toLowerCase(),
+      };
+
   /// Builds the final OData query string by combining all provided options.
   /// It constructs a URL-friendly string with encoded values.
   ///
@@ -94,29 +105,26 @@ class ODataQuery {
   /// print(query);
   /// Output: "$filter=Name%20eq%20%27Milk%27&$orderby=Price%20asc"
   /// ```
-  String build() {
-    final Map<String, String> params = {
-      if (search case final search?) r'$search': search,
-      if (filter case final filter?) r'$filter': filter.toString(),
-      if (orderBy case final orderBy?) r'$orderby': orderBy.toString(),
-      if (select case final select? when select.isNotEmpty)
-        r'$select': select.join(','),
-      if (expand case final expand? when expand.isNotEmpty)
-        r'$expand': expand.join(','),
-      if (top case final top?) r'$top': top.toString(),
-      if (skip case final skip?) r'$skip': skip.toString(),
-      if (count case final count?) r'$count': count.toString().toLowerCase(),
-    };
+  @override
+  String toString() => _params.entries.map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}').join('&');
 
-    if (params.isEmpty) {
-      return '';
-    }
-
-    final queryString = params.entries
-        .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
-        .join('&');
-    return queryString;
-  }
+  /// Converts the current ODataQuery instance into a Map of query parameters.
+  /// Each key represents an OData parameter like `$filter`, `$orderby`, etc.,
+  /// and the corresponding value is the associated string for that parameter.
+  ///
+  /// Example:
+  /// ```dart
+  /// final query = ODataQuery(
+  ///   filter: Filter.eq('Name', 'Milk'),
+  ///   top: 10,
+  /// ).toMap();
+  ///
+  /// print(query);
+  /// Output: {'$filter': "Name eq 'Milk'", '$top': '10'}
+  /// ```
+  ///
+  /// This is useful if you want to manipulate the query parameters as a Map.
+  Map<String, String> toMap() => _params;
 }
 
 /// The Filter class is used to construct OData $filter expressions programmatically.
@@ -139,36 +147,28 @@ class Filter {
   final String _expression;
 
   /// Creates an equality filter (e.g., "Name eq 'Milk'").
-  static Filter eq(String field, dynamic value) =>
-      Filter._('$field eq ${_encode(value)}');
+  static Filter eq(String field, dynamic value) => Filter._('$field eq ${_encode(value)}');
 
   /// Creates a non-equality filter (e.g., "Name ne 'Milk'").
-  static Filter ne(String field, dynamic value) =>
-      Filter._('$field ne ${_encode(value)}');
+  static Filter ne(String field, dynamic value) => Filter._('$field ne ${_encode(value)}');
 
   /// Creates a greater-than filter (e.g., "Price gt 2.55").
-  static Filter gt(String field, dynamic value) =>
-      Filter._('$field gt ${_encode(value)}');
+  static Filter gt(String field, dynamic value) => Filter._('$field gt ${_encode(value)}');
 
   /// Creates a less-than filter (e.g., "Price lt 2.55").
-  static Filter lt(String field, dynamic value) =>
-      Filter._('$field lt ${_encode(value)}');
+  static Filter lt(String field, dynamic value) => Filter._('$field lt ${_encode(value)}');
 
   /// Creates a greater-than or equal-to filter.
-  static Filter ge(String field, dynamic value) =>
-      Filter._('$field ge ${_encode(value)}');
+  static Filter ge(String field, dynamic value) => Filter._('$field ge ${_encode(value)}');
 
   /// Creates a less-than or equal-to filter.
-  static Filter le(String field, dynamic value) =>
-      Filter._('$field le ${_encode(value)}');
+  static Filter le(String field, dynamic value) => Filter._('$field le ${_encode(value)}');
 
   /// Combines two filters using a logical AND (e.g., "Name eq 'Milk' and Price lt 2.55").
-  static Filter and(Filter left, Filter right) =>
-      Filter._('${left._expression} and ${right._expression}');
+  static Filter and(Filter left, Filter right) => Filter._('${left._expression} and ${right._expression}');
 
   /// Combines two filters using a logical OR (e.g., "Name eq 'Milk' or Price lt 2.55").
-  static Filter or(Filter left, Filter right) =>
-      Filter._('${left._expression} or ${right._expression}');
+  static Filter or(Filter left, Filter right) => Filter._('${left._expression} or ${right._expression}');
 
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
