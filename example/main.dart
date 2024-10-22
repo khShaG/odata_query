@@ -14,9 +14,9 @@ void main() {
     expand: ['Category'], // Expanding related entities
     top: 10,
     count: true,
-  ).toString();
+  ).toEncodedString();
 
-  print('Query 1 (toString): $queryString');
+  print('Query 1 (toEncodedString): $queryString');
   // Result:
   // "$filter=Name%20eq%20%27Milk%27%20and%20Price%20lt%202.55&$orderby=Price%20desc&$select=Name,Price&$expand=Category&$top=10&$count=true"
 

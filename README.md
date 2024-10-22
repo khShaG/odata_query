@@ -28,7 +28,7 @@ void main() {
     expand: ['Category'],
     top: 10,
     count: true,
-  ).toString();
+  ).toEncodedString();
 
   print(queryString); 
   // Output:
@@ -53,6 +53,15 @@ void main() {
   //   '$select': 'Name,Price,Category',
   //   '$expand': 'Supplier,Category',
   // }
+
+  final nestedQueryString = ODataQuery(
+    select: ['Name', 'Price'],
+    expand: ['Category(${ODataQuery(select: ['Type'])})'],
+  ).toString();
+
+  print(nestedQueryString); 
+  // Output:
+  // "$select=Name,Price&$expand=Category($select=Type)"
 }
 ```
 

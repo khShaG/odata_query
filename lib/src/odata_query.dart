@@ -95,6 +95,22 @@ class ODataQuery {
       };
 
   /// Builds the final OData query string by combining all provided options.
+  ///
+  /// Example:
+  /// ```dart
+  /// final query = ODataQuery(
+  ///   filter: Filter.eq('Name', 'Milk'),
+  ///   orderBy: OrderBy.asc('Price'),
+  /// ).build();
+  ///
+  /// print(query);
+  /// Output: "$filter=Name eq 'Milk'&$orderby=Price asc"
+  /// ```
+  @override
+  String toString() =>
+      _params.entries.map((entry) => '${entry.key}=${entry.value}').join('&');
+
+  /// Builds the final OData query string by combining all provided options.
   /// It constructs a URL-friendly string with encoded values.
   ///
   /// Example:
@@ -107,8 +123,7 @@ class ODataQuery {
   /// print(query);
   /// Output: "$filter=Name%20eq%20%27Milk%27&$orderby=Price%20asc"
   /// ```
-  @override
-  String toString() => _params.entries
+  String toEncodedString() => _params.entries
       .map((entry) => '${entry.key}=${Uri.encodeComponent(entry.value)}')
       .join('&');
 

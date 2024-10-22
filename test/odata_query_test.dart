@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:odata_query/scr/odata_query.dart';
+import 'package:odata_query/src/odata_query.dart';
 
 void main() {
   group('ODataQuery', () {
@@ -7,7 +7,7 @@ void main() {
       final query = ODataQuery(
         filter: Filter.eq('Name', 'Milk'),
         orderBy: OrderBy.asc('Price'),
-      ).toString();
+      ).toEncodedString();
 
       expect(query, r"$filter=Name%20eq%20'Milk'&$orderby=Price%20asc");
     });
@@ -34,7 +34,7 @@ void main() {
         top: 5,
         skip: 2,
         count: true,
-      ).toString();
+      ).toEncodedString();
 
       expect(
         query,
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('should handle empty or null parameters', () {
-      final query = ODataQuery().toString();
+      final query = ODataQuery().toEncodedString();
       expect(query, '');
     });
 
@@ -68,7 +68,7 @@ void main() {
           ),
           Filter.gt('Price', 5),
         ),
-      ).toString();
+      ).toEncodedString();
 
       expect(
         query,
@@ -79,7 +79,7 @@ void main() {
     test('should handle null filter values correctly', () {
       final query = ODataQuery(
         filter: Filter.eq('Name', null),
-      ).toString();
+      ).toEncodedString();
 
       expect(query, r'$filter=Name%20eq%20null');
     });
@@ -87,7 +87,7 @@ void main() {
     test('should handle multiple select fields', () {
       final query = ODataQuery(
         select: ['Name', 'Price', 'Category'],
-      ).toString();
+      ).toEncodedString();
 
       expect(
         query,
@@ -98,7 +98,7 @@ void main() {
     test('should handle multiple expand fields', () {
       final query = ODataQuery(
         expand: ['Category', 'Supplier'],
-      ).toString();
+      ).toEncodedString();
 
       expect(
         query,
@@ -110,7 +110,7 @@ void main() {
       final query = ODataQuery(
         select: [],
         expand: null,
-      ).toString();
+      ).toEncodedString();
 
       expect(query, '');
     });
@@ -118,7 +118,7 @@ void main() {
     test('should handle skip without top', () {
       final query = ODataQuery(
         skip: 20,
-      ).toString();
+      ).toEncodedString();
 
       expect(query, r'$skip=20');
     });

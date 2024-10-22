@@ -1,3 +1,9 @@
+## 2.1.0
+
+* Added `toEncodedString()` and normal `toString()` does not encode the query.
+* Fixed typo in `scr` -> `src` folder
+* Example for nested odata queries
+
 ## 2.0.0
 
 * `toString()` and `toMap()` functions instead of `build()`.
