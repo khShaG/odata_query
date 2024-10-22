@@ -1,0 +1,23 @@
+{
+  "explorer.fileNesting.patterns": {
+    "pubspec.yaml": "pubspec.lock, pubspec_overrides.yaml, pubspec.semver.js, analysis_options.yaml, dart_test.yaml, l10n.yaml, flavorizr.yaml, devtools_options.yaml",
+    "README.md": "CHANGELOG.md",
+    ".gitignore": ".gitmodules,.git,.chignore,.pubignore,.dockerignore",
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
+    }
+  },
+  "dart.lineLength": 80,
+}
