@@ -197,6 +197,29 @@ class Filter {
   static Filter or(Filter left, Filter right) =>
       Filter._('${left._expression} or ${right._expression}');
 
+  /// Creates an `in` filter for matching a field against a list of values.
+  ///
+  /// Example:
+  /// ```dart
+  /// filter: Filter.inList('Name', ['Milk', 'Cheese', 'Donut'])
+  /// // Produces: Name in ('Milk','Cheese','Donut')
+  /// ```
+  static Filter inList(String field, List<dynamic> values) {
+    final encodedValues = values.map(_encode).join(',');
+    return Filter._('$field in ($encodedValues)');
+  }
+
+  /// Creates an `in` filter for matching a field against another collection or expression.
+  ///
+  /// Example:
+  /// ```dart
+  /// filter: Filter.inCollection('Name', 'RelevantProductNames')
+  /// // Produces: "Name in RelevantProductNames"
+  /// ```
+  static Filter inCollection(String field, String collection) {
+    return Filter._('$field in $collection');
+  }
+
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
     if (value is String) {

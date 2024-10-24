@@ -18,6 +18,7 @@
 import 'package:odata_query/odata_query.dart';
 
 void main() {
+  // Example 1: Standard filter, orderBy, select, expand, top, and count
   final queryString = ODataQuery(
     filter: Filter.and(
       Filter.eq('Name', 'Milk'),
@@ -34,6 +35,7 @@ void main() {
   // Output:
   // "$filter=Name%20eq%20'Milk'%20and%20Price%20lt%202.55&$orderby=Price%20desc&$select=Name,Price&$expand=Category&$top=10&$count=true"
 
+  // Example 2: Filter with logical operators and select/expand parameters
   final queryMap = ODataQuery(
     filter: Filter.and(
       Filter.or(
@@ -54,15 +56,37 @@ void main() {
   //   '$expand': 'Supplier,Category',
   // }
 
-  final nestedQueryString = ODataQuery(
+  // Example 3: Nested expand with a sub-query
+  final queryNested = ODataQuery(
     select: ['Name', 'Price'],
     expand: ['Category(${ODataQuery(select: ['Type'])})'],
   ).toString();
 
-  print(nestedQueryString); 
+  print(queryNested); 
   // Output:
   // "$select=Name,Price&$expand=Category($select=Type)"
+
+  // Example 4: Using inList to filter with multiple values
+  final queryInList = ODataQuery(
+    filter: Filter.inList('Name', ['Milk', 'Cheese', 'Donut']),
+    select: ['Name', 'Price'],
+  ).toEncodedString();
+
+  print(queryInList); 
+  // Output:
+  // "$filter=Name%20in%20('Milk'%2C%20'Cheese'%2C%20'Donut')&$select=Name%2CPrice"
+
+  // Example 5: Using inCollection to filter using a collection reference
+  final queryInCollection = ODataQuery(
+    filter: Filter.inCollection('Name', 'RelevantProductNames'),
+    select: ['Name', 'Price'],
+  ).toEncodedString();
+
+  print(queryInCollection); 
+  // Output:
+  // "$filter=Name%20in%20RelevantProductNames&$select=Name%2CPrice"
 }
+
 ```
 
 

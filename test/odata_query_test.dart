@@ -122,6 +122,22 @@ void main() {
 
       expect(query, r'$skip=20');
     });
+
+    test('should create a query with filter using inList', () {
+      final query = ODataQuery(
+        filter: Filter.inList('Name', ['Milk', 'Cheese', 'Donut']),
+      ).toEncodedString();
+
+      expect(query, r"$filter=Name%20in%20('Milk'%2C'Cheese'%2C'Donut')");
+    });
+
+    test('should create a query with filter using inCollection', () {
+      final query = ODataQuery(
+        filter: Filter.inCollection('Name', 'RelevantProductNames'),
+      ).toEncodedString();
+
+      expect(query, r'$filter=Name%20in%20RelevantProductNames');
+    });
   });
 
   group('Filter', () {
@@ -166,6 +182,34 @@ void main() {
     test('should handle null value in lt filter', () {
       final filter = Filter.lt('Price', null).toString();
       expect(filter, 'Price lt null');
+    });
+
+    test('should create an inList filter', () {
+      final filter =
+          Filter.inList('Name', ['Milk', 'Cheese', 'Donut']).toString();
+      expect(filter, "Name in ('Milk','Cheese','Donut')");
+    });
+
+    test('should create an inCollection filter', () {
+      final filter =
+          Filter.inCollection('Name', 'RelevantProductNames').toString();
+      expect(filter, 'Name in RelevantProductNames');
+    });
+
+    test('should handle inList filter with numbers', () {
+      final filter = Filter.inList('Price', [1.99, 2.49, 5.00]).toString();
+      expect(filter, 'Price in (1.99,2.49,5.0)');
+    });
+
+    test('should handle inList filter with special characters', () {
+      final filter = Filter.inList('Name', ["O'Reilly", 'Milk']).toString();
+      expect(filter, "Name in ('O''Reilly','Milk')");
+    });
+
+    test('should handle inCollection with complex collection name', () {
+      final filter =
+          Filter.inCollection('CountryCode', 'MyShippers/Regions').toString();
+      expect(filter, 'CountryCode in MyShippers/Regions');
     });
   });
 
