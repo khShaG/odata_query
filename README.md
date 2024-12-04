@@ -56,15 +56,21 @@ void main() {
   //   '$expand': 'Supplier,Category',
   // }
 
-  // Example 3: Nested expand with a sub-query
+  // Example 3: Nested query - in parenthesis and separated by a colon.
   final queryNested = ODataQuery(
     select: ['Name', 'Price'],
-    expand: ['Category(${ODataQuery(select: ['Type'])})'],
+    expand: [
+      'Category(${ODataQuery(
+        select: ['Type'],
+      )};${ODataQuery(
+        orderBy: OrderBy.asc('DateCreated'),
+      )})',
+    ],
   ).toString();
 
   print(queryNested); 
   // Output:
-  // "$select=Name,Price&$expand=Category($select=Type)"
+  // "$select=Name,Price&$expand=Category($select=Type;$orderby=DateCreated asc)"
 
   // Example 4: Using inList to filter with multiple values
   final queryInList = ODataQuery(

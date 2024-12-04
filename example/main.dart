@@ -39,17 +39,23 @@ void main() {
   // }
 
   // Example 3: Build a nested query to select 'Name' and 'Price', and expand the 'Category'
-  // with a sub-query that selects only the 'Type' field from 'Category'.
+  // with a sub-query that selects only the 'Type' field from 'Category' and orders by 'DateCreated' in ascending order.
+  //
+  // Warning: the nested ODataQueries must be separated by a colon.
   final queryNested = ODataQuery(
     select: ['Name', 'Price'],
     expand: [
-      'Category(${ODataQuery(select: ['Type'])})',
+      'Category(${ODataQuery(
+        select: ['Type'],
+      )};${ODataQuery(
+        orderBy: OrderBy.asc('DateCreated'),
+      )})',
     ],
   ).toString();
 
   print('Query 3 (nested): $queryNested');
   // Result:
-  // "$select=Name,Price&$expand=Category($select=Type)"
+  // "$select=Name,Price&$expand=Category($select=Type;$orderby=DateCreated asc)"
 
   // Example 4: Using inList to filter products where the 'Name' is one of several values.
   // This query filters items whose name is either 'Milk', 'Cheese', or 'Donut', and selects 'Name' and 'Price'.
