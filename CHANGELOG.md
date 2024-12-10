@@ -1,4 +1,4 @@
-## 2.2.0
+## 2.3.0
 
 * Added `any` and `all` filters.
 * Updated readme and example.
