@@ -1,5 +1,10 @@
 ## 2.2.0
 
+* Added `any` and `all` filters.
+* Updated readme and example.
+
+## 2.2.0
+
 * Added `inList` and `inCollection` filters.
 * Updated readme and example.
 

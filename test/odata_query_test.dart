@@ -211,6 +211,20 @@ void main() {
           Filter.inCollection('CountryCode', 'MyShippers/Regions').toString();
       expect(filter, 'CountryCode in MyShippers/Regions');
     });
+
+    test('should create an any filter', () {
+      final filter =
+          Filter.any('Products', 'item', Filter.eq('item/Type', 'Active'))
+              .toString();
+      expect(filter, "Products/any(item:item/Type eq 'Active')");
+    });
+
+    test('should create an all filter', () {
+      final filter =
+          Filter.all('Products', 'item', Filter.eq('item/Type', 'Active'))
+              .toString();
+      expect(filter, "Products/all(item:item/Type eq 'Active')");
+    });
   });
 
   group('OrderBy', () {

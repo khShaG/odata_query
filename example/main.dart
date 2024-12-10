@@ -78,4 +78,24 @@ void main() {
   print('Query 5 (inCollection): $queryInCollection');
   // Result:
   // "$filter=Name%20in%20RelevantProductNames&$select=Name%2CPrice"
+
+  // Example 6: Using any to filter products with a collection property.
+  // This filters items where there is at least one product that have the value 'Active' for the 'Type' property.
+  final queryAny = ODataQuery(
+    filter: Filter.any('Products', 'item', Filter.eq('item/Type', 'Active')),
+  ).toEncodedString();
+
+  print('Query 6 (any): $queryAny');
+  // Result:
+  // "$filter=Products/any(item:item/Type eq 'Active')"
+
+  // Example 7: Using all to filter products where all items in a collection satisfy a condition.
+  // This filters items where all products that have the value 'Active' for the 'Type' property.
+  final queryAll = ODataQuery(
+    filter: Filter.all('Products', 'item', Filter.eq('item/Type', 'Active')),
+  ).toEncodedString();
+
+  print('Query 7 (all): $queryAll');
+  // Result:
+  // "$filter=Products/all(item:item/Type eq 'Active')"
 }

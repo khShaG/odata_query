@@ -91,6 +91,24 @@ void main() {
   print(queryInCollection); 
   // Output:
   // "$filter=Name%20in%20RelevantProductNames&$select=Name%2CPrice"
+
+  // Example 6: Using any filter.
+  final queryAny = ODataQuery(
+    filter: Filter.any('Products', 'item', Filter.eq('item/Type', 'Active')),
+  ).toEncodedString();
+
+  print(queryAny);
+  // Output:
+  // "$filter=Products/any(item:item/Type eq 'Active')"
+
+  // Example 7: Using all filter.
+  final queryAll = ODataQuery(
+    filter: Filter.all('Products', 'item', Filter.eq('item/Type', 'Active')),
+  ).toEncodedString();
+
+  print(queryAll);
+  // Output:
+  // "$filter=Products/all(item:item/Type eq 'Active')"
 }
 
 ```

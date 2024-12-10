@@ -220,6 +220,26 @@ class Filter {
     return Filter._('$field in $collection');
   }
 
+  /// Creates a filter using the `any` operator.
+  ///
+  /// Example:
+  /// ```dart
+  /// Filter.any('collection', 'item', Filter.eq('item/subProperty', 'value'))
+  /// // Produces: "collection/any(item:item/subProperty eq 'value')"
+  /// ```
+  static Filter any(String collection, String variable, Filter condition) =>
+      Filter._('$collection/any($variable:${condition._expression})');
+
+  /// Creates a filter using the `all` operator.
+  ///
+  /// Example:
+  /// ```dart
+  /// Filter.all('collection', 'item', Filter.eq('item/subProperty', 'value'))
+  /// // Produces: "collection/all(item:item/subProperty eq 'value')"
+  /// ```
+  static Filter all(String collection, String variable, Filter condition) =>
+      Filter._('$collection/all($variable:${condition._expression})');
+
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
     if (value is String) {
