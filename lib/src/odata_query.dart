@@ -319,7 +319,7 @@ class Filter {
     FilterOperators operator,
   ) =>
       Filter._(
-        filters.map((e) => e.toString()).join(' ${operator.toString()} '),
+        filters.map((e) => e.toString()).join(' ${operator.name} '),
       );
 
   /// Helper method to encode values like strings or numbers.
@@ -338,7 +338,7 @@ class Filter {
   ) {
     return values
         .map((e) => '$field eq ${_encode(e)}')
-        .join(' ${operator.toString()} ');
+        .join(' ${operator.name} ');
   }
 
   /// Helper method to encode map values.
@@ -348,7 +348,7 @@ class Filter {
   ) {
     return map.entries
         .map((entry) => '${entry.key} eq ${_encode(entry.value)}')
-        .join(' ${operator.toString()} ');
+        .join(' ${operator.name} ');
   }
 
   /// Converts the filter to a string for query usage.
