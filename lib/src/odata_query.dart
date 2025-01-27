@@ -318,7 +318,9 @@ class Filter {
     List<Filter> filters,
     FilterOperators operator,
   ) =>
-      Filter._(filters.map((e) => e.toString()).join(' $operator '));
+      Filter._(
+        filters.map((e) => e.toString()).join(' ${operator.toString()} '),
+      );
 
   /// Helper method to encode values like strings or numbers.
   static String _encode(dynamic value) {
@@ -346,7 +348,7 @@ class Filter {
   ) {
     return map.entries
         .map((entry) => '${entry.key} eq ${_encode(entry.value)}')
-        .join(' $operator ');
+        .join(' ${operator.toString()} ');
   }
 
   /// Converts the filter to a string for query usage.
