@@ -168,8 +168,8 @@ class Filter {
   final String _expression;
 
   /// Creates an equality filter (e.g., "Name eq 'Milk'").
-  static Filter eq(String field, dynamic value) =>
-      Filter._('$field eq ${_encode(value)}');
+  static Filter eq(String field, dynamic value, {bool isGuid = false}) =>
+      Filter._('$field eq ${_encode(value, isGuid: isGuid)}');
 
   /// Creates a non-equality filter (e.g., "Name ne 'Milk'").
   static Filter ne(String field, dynamic value) =>
@@ -323,7 +323,13 @@ class Filter {
       );
 
   /// Helper method to encode values like strings or numbers.
-  static String _encode(dynamic value) {
+  static String _encode(
+    dynamic value, {
+    bool isGuid = false,
+  }) {
+    if (isGuid) {
+      return value.toString();
+    }
     if (value is String) {
       return "'${value.replaceAll("'", "''")}'";
     }
