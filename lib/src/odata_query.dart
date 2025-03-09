@@ -184,12 +184,12 @@ class Filter {
       Filter._('$field lt ${_encode(value)}');
 
   /// Creates a greater-than or equal-to filter.
-  static Filter ge(String field, dynamic value) =>
-      Filter._('$field ge ${_encode(value)}');
+  static Filter ge(String field, dynamic value, {bool isGuid = false}) =>
+      Filter._('$field ge ${_encode(value, isGuid: isGuid)}');
 
   /// Creates a less-than or equal-to filter.
-  static Filter le(String field, dynamic value) =>
-      Filter._('$field le ${_encode(value)}');
+  static Filter le(String field, dynamic value, {bool isGuid = false}) =>
+      Filter._('$field le ${_encode(value, isGuid: isGuid)}');
 
   /// Combines two filters using a logical AND (e.g., "Name eq 'Milk' and Price lt 2.55").
   static Filter and(Filter left, Filter right) =>
